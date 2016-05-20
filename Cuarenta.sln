@@ -5,7 +5,13 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuarenta", "Cuarenta\Cuarenta.csproj", "{BFE1711E-371B-408C-AAAE-F11FBC5DA67F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedCuarenta", "SharedCuarenta\SharedCuarenta.shproj", "{B543BC0C-1649-41DE-B92E-6AF9D0329488}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SharedCuarenta\SharedCuarenta.projitems*{b543bc0c-1649-41de-b92e-6af9d0329488}*SharedItemsImports = 13
+		SharedCuarenta\SharedCuarenta.projitems*{bfe1711e-371b-408c-aaae-f11fbc5da67f}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
