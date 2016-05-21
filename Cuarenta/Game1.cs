@@ -17,11 +17,8 @@ namespace Cuarenta
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GraphicsDevice device;
 
-        private SpriteFont font;
-        private PartidaDeCuarenta partida;
-        private int numJug;
+        private GraphicsDevice device;
 
         public Game1()
         {
@@ -42,9 +39,7 @@ namespace Cuarenta
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            numJug = 2;
-            partida = new PartidaDeCuarenta(numJug);
-            partida.IniciarPartida(numJug);
+            this.IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -59,7 +54,7 @@ namespace Cuarenta
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            font = Content.Load<SpriteFont>("msgFont");
+
         }
 
         /// <summary>
@@ -98,31 +93,6 @@ namespace Cuarenta
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            int i = 0, j = 0;
-
-            spriteBatch.Begin();
-            for (j = 0; j < numJug; j++)
-            {
-                i = 0;
-                foreach (Naipe naipe in partida.Manos[j].NaipesEnGrupo)
-                {
-                    spriteBatch.DrawString(font, naipe.ToString(), new Vector2(j * 200, i * 20), Color.Black);
-                    i++;
-                }
-
-            }
-
-            i = 0;
-            j = 0;
-            foreach (Naipe naipe in partida.Mazo.NaipesEnGrupo)
-            {
-                spriteBatch.DrawString(font, naipe.ToString(), new Vector2(j * 200, 120 + (i % 10) * 20), Color.Black);
-                i++;
-                if (i % 10 == 0)
-                    j++;
-            }
-
-            spriteBatch.End();
             
             base.Draw(gameTime);
         }
