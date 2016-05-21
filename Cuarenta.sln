@@ -12,6 +12,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SharedCuarenta\SharedCuarenta.projitems*{b543bc0c-1649-41de-b92e-6af9d0329488}*SharedItemsImports = 13
+		SharedCuarenta\SharedCuarenta.projitems*{4a72038c-9445-44a9-9577-b77791b17652}*SharedItemsImports = 4
 		SharedCuarenta\SharedCuarenta.projitems*{bfe1711e-371b-408c-aaae-f11fbc5da67f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
