@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Clase que representa un naipe de una baraja
+
+using System;
 
 namespace Cuarenta.Naipes
 {
