@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuarenta", "Cuarenta\Cuarenta.csproj", "{BFE1711E-371B-408C-AAAE-F11FBC5DA67F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinCuarenta", "Cuarenta\WinCuarenta.csproj", "{BFE1711E-371B-408C-AAAE-F11FBC5DA67F}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedCuarenta", "SharedCuarenta\SharedCuarenta.shproj", "{B543BC0C-1649-41DE-B92E-6AF9D0329488}"
 EndProject

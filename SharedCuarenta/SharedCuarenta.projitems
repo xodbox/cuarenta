@@ -9,5 +9,8 @@
     <Import_RootNamespace>SharedCuarenta</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CuarentaEngine\PartidaDeCuarenta.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Naipes\GrupoDeNaipes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Naipes\Naipe.cs" />
   </ItemGroup>
 </Project>
