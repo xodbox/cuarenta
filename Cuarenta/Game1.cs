@@ -8,6 +8,7 @@ using System;
 using Cuarenta.Naipes;
 using Cuarenta.CuarentaEngine;
 
+
 namespace Cuarenta
 {
     /// <summary>
@@ -18,7 +19,7 @@ namespace Cuarenta
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private GraphicsDevice device;
+        GraphicsDevice device;
 
         public Game1()
         {
@@ -28,6 +29,7 @@ namespace Cuarenta
             device = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, new PresentationParameters());
             graphics.PreferredBackBufferWidth = device.DisplayMode.Width - 30;
             graphics.PreferredBackBufferHeight = device.DisplayMode.Height - 90;
+
         }
 
         /// <summary>
@@ -54,7 +56,6 @@ namespace Cuarenta
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace Cuarenta
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            
+
             base.Draw(gameTime);
         }
     }
