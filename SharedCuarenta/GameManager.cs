@@ -1,71 +1,71 @@
-﻿#region description
-//----------------------------------
-//Implements Intialize and Update common to all the platforms
-//
-//
-//-----------------------------------
-#endregion
-
-#region using 
+﻿using Cuarenta.CuarentaEngine;
+using Cuarenta.Enums;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Cuarenta.CuarentaEngine;
-using Cuarenta.Naipes;
-using Microsoft.Xna.Framework;
-
-#endregion
-
 namespace SharedCuarenta
 {
-    class GameManager : GameComponent
+    /// <summary>
+    /// Class to manage the whole game and to keep the game state
+    /// </summary>
+    class GameManager
     {
-        #region fields
-        enum GameState
-        {
-            InitGame,
-            ToPlaying,
-            Playing
-        }
-
-        PartidaDeCuarenta partida;
+        #region Fields
         GameState gameState;
+        PartidaDeCuarenta partida;
 
         #endregion
 
-        #region Properties
-        
-
-        #endregion
-
-        #region Initialization
-        public GameManager(Game game)
-            : base(game)
+        #region Constructors
+        /// <summary>
+        /// Constructor GameManager
+        /// </summary>
+        public GameManager(Rectangle windowSize)
         {
             partida = new PartidaDeCuarenta();
-        }
-
-        public override void Initialize()
-        {
-            gameState = GameState.InitGame;
-
-            base.Initialize();
-        }
-
-        #endregion
-
-        #region Update
-        public override void Update(GameTime gameTime)
-        {
-            if(gameState == GameState.InitGame)
+            for (int i = 0; i < 4; i++)
             {
-
+                for (int j = 0; j<5; j++)
+                {
+                    partida.Manos[i].NaipesEnGrupo[j].CardSize = getCardSize(windowSize);
+                }
             }
+        }
+        #endregion
 
-            base.Update(gameTime);
+        #region Public Methods
+        /// <summary>
+        /// Create a new Game
+        /// </summary>
+        /// <param name="numJugadores">Number of players</param>
+        public void newGame(int numJugadores)
+        {
+            partida.IniciarPartida(numJugadores);
+            if(numJugadores == 2)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    partida.Manos[0].NaipesEnGrupo[i].CardSize = 
+                }
+            }
+            gameState = GameState.Playing;
+        }
+
+        public void ProcessClick(Vector2 clickPosition)
+        {
+
         }
 
         #endregion
+
+        #region Private Methdos
+        private Rectangle getCardSize(Rectangle windowSize)
+        {
+            columnSize = 
+        }
+        #endregion
+
     }
 }

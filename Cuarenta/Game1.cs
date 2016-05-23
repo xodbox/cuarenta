@@ -7,7 +7,7 @@ using System.IO;
 using System;
 using Cuarenta.Naipes;
 using Cuarenta.CuarentaEngine;
-
+using Cuarenta;
 
 namespace Cuarenta
 {
@@ -20,6 +20,7 @@ namespace Cuarenta
         SpriteBatch spriteBatch;
 
         GraphicsDevice device;
+        GameManager gameManager;
 
         public Game1()
         {
@@ -27,8 +28,13 @@ namespace Cuarenta
             Content.RootDirectory = "Content";
 
             device = new GraphicsDevice(GraphicsAdapter.DefaultAdapter, GraphicsProfile.HiDef, new PresentationParameters());
-            graphics.PreferredBackBufferWidth = device.DisplayMode.Width - 30;
-            graphics.PreferredBackBufferHeight = device.DisplayMode.Height - 90;
+            //graphics.PreferredBackBufferWidth = device.DisplayMode.Width - 30;
+            //graphics.PreferredBackBufferHeight = device.DisplayMode.Height - 90;
+
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 600;
+
+            gameManager = new GameManager();
 
         }
 

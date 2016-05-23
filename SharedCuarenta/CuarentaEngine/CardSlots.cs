@@ -1,0 +1,165 @@
+﻿using Microsoft.Xna.Framework;
+using System;
+using Cuarenta.Enums;
+
+namespace SharedCuarenta.CuarentaEngine
+{
+    class CardSlots
+    {
+        #region Properties
+        /// <summary>
+        /// Position of the cards of the players and if that slot is used
+        /// There are 4 playeres and each one can have 5 cards
+        /// </summary>
+        public Point[,] PlayerCardPosition { get; set; } = new Point[4, 5];
+        public bool[,] UsedPlayerCardPosition { get; set; } = new bool[4, 5];
+
+        /// <summary>
+        /// Position of the cards on the table and if that slot si used
+        /// A maximun of 10 cards could be on the table
+        /// </summary>
+        public Point[] TableCardPosition { get; set; } = new Point[10];
+        public bool[] UsedTableCardPosition { get; set; } = new bool[10];
+
+        /// <summary>
+        /// Position of the cards used to keep the score
+        /// Each player or team have their own score cards (2 players or teams)
+        /// and a max of six cards needed to keep the score
+        /// </summary>
+        public Point[,] ScoreCardPosition { get; set; } = new Point[2, 6];
+        public bool[,] UsedScoreCardPosition { get; set; } = new bool[2, 6];
+
+        /// <summary>
+        /// Position of the cards that left and will be dealed.
+        /// Kept as an array for future expansion
+        /// </summary>
+        public Point[] ToDealCardPosition { get; set; } = new Point[1];
+        public bool[] UsedToDealCardPosition { get; set; } = new bool[1];
+
+        /// <summary>
+        /// size of the cards
+        /// </summary>
+        public Rectangle CardSize { get; }
+
+        #endregion
+
+        #region Constructors
+        /// <summary>
+        /// Initialize all the slots assigning its coorditantes
+        /// </summary>
+        /// <param name="windowSize"></param>
+        public CardSlots(Rectangle windowSize)
+        {
+
+            // Calculate the columns (grid) used to position the cards
+            int[] columnCenters = new int[11];
+            float columnWidth;
+            float firstCenter;
+            columnWidth = (float)(windowSize.Width - Constants.Margin * 2) / 11;
+            firstCenter = columnWidth / 2 + Constants.Margin;
+            for(int i = 0; i < 11; i++)
+                columnCenters[i] = (int) Math.Round(firstCenter + columnWidth * i);
+
+            //calculate card size according to the window
+            Rectangle cardSize = new Rectangle();
+            cardSize.Width = (int) columnWidth - Constants.InterCardSpace;
+            cardSize.Height = (int) (columnWidth / Constants.CardRatioWH);
+            if ((float)cardSize.Height > 2*columnWidth)
+            {
+                cardSize.Height = (int) (2 * columnWidth) - Constants.InterCardSpace;
+                cardSize.Width = (int) (CardSize.Height * Constants.CardRatioWH);
+            }
+            CardSize = cardSize;
+
+            //calculate slots positions for player 0 (botton player)
+            int bottonRowYPositionPlayer = (int)Math.Round(windowSize.Height - (float)cardSize.Height / 2 - Constants.Margin);
+            for (int i = 0; i < 5; i++)
+            {
+                PlayerCardPosition[0, i].X = columnCenters[2 + i];
+                PlayerCardPosition[0, i].Y = bottonRowYPositionPlayer;
+            }
+
+            //calculate slots positions for player 2 (top player)
+            int topRowYPositionPlayer = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
+            for (int i = 0; i < 5; i++)
+            {
+                PlayerCardPosition[2, i].X = columnCenters[2 + i];
+                PlayerCardPosition[2, i].Y = topRowYPositionPlayer;
+            }
+
+            //calculate slots positions for player 1 (right player)
+            int firstPlayerCardYPosition = (int)Math.Round((windowSize.Height - columnWidth * 5) / 2 + columnWidth / 2);
+            int rightColumnXPositionPlayer = (int)Math.Round(Constants.Margin + columnWidth * 9 - (float)cardSize.Height / 2); ;
+            for (int i = 0; i < 5; i++)
+            {
+                PlayerCardPosition[1, i].X = rightColumnXPositionPlayer;
+                PlayerCardPosition[1, i].Y = (int)Math.Round(firstPlayerCardYPosition + columnWidth * i);
+            }
+
+            //calculate slots positons for player 3 (left player)
+            int leftColumnXPositionPlayer = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
+            for (int i = 0; i < 5; i++)
+            {
+                PlayerCardPosition[3, i].X = leftColumnXPositionPlayer;
+                PlayerCardPosition[3, i].Y = (int)Math.Round(firstPlayerCardYPosition + columnWidth * i);
+            }
+
+            //calculate slots for top row table cards
+            int topRowTableCardYPosition = (int)Math.Round((float)windowSize.Height / 2 - (float)cardSize.Height / 2 - Constants.InterCardSpace);
+            for(int i = 0; i < 5; i++)
+            {
+                TableCardPosition[i].X = columnCenters[2 + i];
+                TableCardPosition[i].Y = topRowTableCardYPosition;
+            }
+
+            //calculate slots for botton row table cards
+            int bottonRowTableCardYPosition = (int)Math.Round((float)windowSize.Height / 2 + (float)cardSize.Height / 2 + Constants.InterCardSpace);
+            for (int i = 0; i < 5; i++)
+            {
+                TableCardPosition[i + 5].X = columnCenters[2 + i];
+                TableCardPosition[i + 5].Y = bottonRowTableCardYPosition;
+            }
+
+            //calculate slots for points cards (perros)
+            int perrosSpace = (int)Math.Round(Constants.PerrosSpaceRatioSW * cardSize.Width);
+            int scoreCardPlayerXInitPosition = columnCenters[10] - perrosSpace * 5;
+            int scoreCardPlayerTopYInitPosition = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
+            int scoreCardPlayerBottonYInitPosition = (int)Math.Round(windowSize.Height - Constants.Margin - (float)cardSize.Height / 2 - perrosSpace *5 );
+            for (int i=0; i<6; i++)
+            {
+                ScoreCardPosition[0, i].X = scoreCardPlayerXInitPosition + perrosSpace * i;
+                ScoreCardPosition[1, i].X = scoreCardPlayerXInitPosition + perrosSpace * i;
+                ScoreCardPosition[0, i].Y = scoreCardPlayerBottonYInitPosition + perrosSpace * i;
+                ScoreCardPosition[1, i].Y = scoreCardPlayerTopYInitPosition + perrosSpace * i;
+            }
+
+            //calculate slots for to deal cards
+            ToDealCardPosition[0].X = (int)Math.Round(columnCenters[9] + columnWidth / 2);
+            ToDealCardPosition[0].Y = (int)Math.Round((float)windowSize.Height / 2);
+
+            //set all Used slots as false (no slot is used)
+            for(int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    UsedPlayerCardPosition[i, j] = false;
+                }
+            }
+            for(int i = 0; i < 10; i++)
+            {
+                UsedTableCardPosition[i] = false;
+            }
+            for(int i = 0; i < 2; i++)
+            {
+                for(int j = 0; j < 6; j++)
+                {
+                    UsedScoreCardPosition[i, j] = false;
+                }
+            }
+            UsedToDealCardPosition[0] = false;
+
+        }
+        #endregion
+
+    }
+}

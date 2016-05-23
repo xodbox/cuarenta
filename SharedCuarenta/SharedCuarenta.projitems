@@ -9,7 +9,9 @@
     <Import_RootNamespace>SharedCuarenta</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CuarentaEngine\CardSlots.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CuarentaEngine\PartidaDeCuarenta.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\CuarentaEnums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\GrupoDeNaipes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\Naipe.cs" />
