@@ -1,5 +1,6 @@
 ﻿using Cuarenta.CuarentaEngine;
 using Cuarenta.Enums;
+using Cuarenta.Naipes;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,9 @@ namespace SharedCuarenta
         #region Fields
         GameState gameState;
         PartidaDeCuarenta partida;
-
+        CardSlots cardSlots;
+        static Random rnd = new Random();
+        int dataPlayer;
         #endregion
 
         #region Constructors
@@ -25,13 +28,7 @@ namespace SharedCuarenta
         public GameManager(Rectangle windowSize)
         {
             partida = new PartidaDeCuarenta();
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j<5; j++)
-                {
-                    partida.Manos[i].NaipesEnGrupo[j].CardSize = getCardSize(windowSize);
-                }
-            }
+            cardSlots = new CardSlots(windowSize);
         }
         #endregion
 
@@ -40,15 +37,54 @@ namespace SharedCuarenta
         /// Create a new Game
         /// </summary>
         /// <param name="numJugadores">Number of players</param>
-        public void newGame(int numJugadores)
+        /// <param name="thisPlayer">which player is playing this game</param>
+        /// <param name="dataPlayer">which player is going to deal</param>
+        public void newGame(int numJugadores, int thisPlayer)
         {
-            partida.IniciarPartida(numJugadores);
-            if(numJugadores == 2)
+            if (numJugadores != 2 && numJugadores != 4)
+                throw new ArgumentOutOfRangeException();
+
+            //choose who is goint to deal
+            dataPlayer = rnd.Next(0, numJugadores);
+
+            // Begin game (shuffle and deal cardas, choose which cards are face up. SIZE IS NOT ASSIGNED, determine if card is on game)
+            partida.IniciarPartida(numJugadores, thisPlayer, dataPlayer);
+
+            //assign slots to dealt cards
+            int indexPlayer = thisPlayer;
+            for(int i = 0; i < numJugadores; i++)
             {
-                for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 5; j++)
                 {
-                    partida.Manos[0].NaipesEnGrupo[i].CardSize = 
+                    if (numJugadores == 4)
+                    {
+                        partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i, j]);
+                        cardSlots.UsedPlayerCardPosition[i, j] = true;
+                    }
+                    else
+                    {
+                        partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i * 2, j]);
+                        cardSlots.UsedPlayerCardPosition[i * 2, j] = true;
+                    }
+                    partida.Manos[indexPlayer].NaipesEnGrupo[j].CardSize = cardSlots.CardSize;
                 }
+                indexPlayer++;
+                if (indexPlayer >= numJugadores)
+                    indexPlayer = 0;
+            }
+
+            //asign slots to cards to deal
+            foreach (Naipe card in partida.Mazo.NaipesEnGrupo)
+            {
+                card.SetCenter(cardSlots.ToDealCardPosition[0]);
+                card.CardSize = cardSlots.CardSize;
+                cardSlots.UsedToDealCardPosition[0] = true;
+            }
+
+            //asing size to score cards (perros)
+            foreach (Naipe card in partida.Perros.NaipesEnGrupo)
+            {
+                card.CardSize = cardSlots.CardSize;
             }
             gameState = GameState.Playing;
         }
@@ -61,10 +97,6 @@ namespace SharedCuarenta
         #endregion
 
         #region Private Methdos
-        private Rectangle getCardSize(Rectangle windowSize)
-        {
-            columnSize = 
-        }
         #endregion
 
     }

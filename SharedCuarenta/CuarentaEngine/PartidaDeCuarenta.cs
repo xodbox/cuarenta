@@ -11,10 +11,12 @@ namespace Cuarenta.CuarentaEngine
     class PartidaDeCuarenta
     {
         #region Fileds
-        public GrupoDeNaipes NaipesEnMesa { get; private set; }
-        public GrupoDeNaipes[] Manos { get; private set; }
-        public GrupoDeNaipes Mazo { get; private set; }
-        public GrupoDeNaipes Perros { get; private set; }
+        public GrupoDeNaipes[] Manos { get; }
+        public GrupoDeNaipes NaipesEnMesa { get; }
+        public GrupoDeNaipes Mazo { get; }
+        public GrupoDeNaipes Perros { get; }
+        public GrupoDeNaipes[] Carton { get; }
+        public GrupoDeNaipes[] Puntos { get; }
         #endregion
 
         #region Constructor
@@ -24,14 +26,11 @@ namespace Cuarenta.CuarentaEngine
         public PartidaDeCuarenta()
         {
             Manos = new GrupoDeNaipes[4];
-            for (int i = 0; i < 4; i++)
-            {
-                Manos[i] = new GrupoDeNaipes();
-            }
-
             NaipesEnMesa = new GrupoDeNaipes();
             Mazo = new GrupoDeNaipes();
             Perros = new GrupoDeNaipes();
+            Carton = new GrupoDeNaipes[2];
+            Puntos = new GrupoDeNaipes[2];
         }
         #endregion
 
@@ -40,49 +39,84 @@ namespace Cuarenta.CuarentaEngine
         /// Begin a Cuarenta Match, clearing everything, shuffleing the deck and dealing the first hand.
         /// </summary>
         /// <param name="numeroDeJugadores">Number of players in the match</param>
-        public void IniciarPartida(int numeroDeJugadores)
+        /// <param name="thisPlayer">Which player is this</param>
+        /// <param name="dataPlayer">Which player is dealing</param>
+        public void IniciarPartida(int numeroDeJugadores, int thisPlayer, int dataPlayer)
         {
             if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
-            for(int i = 0; i < numeroDeJugadores; i++)
-            {
-                Manos[i].NaipesEnGrupo.Clear();
-            }
-            NaipesEnMesa.NaipesEnGrupo.Clear();
-            Mazo.NaipesEnGrupo.Clear();
             Perros.NaipesEnGrupo.Clear();
 
             foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
             {
                 foreach (CardRank rank in Enum.GetValues(typeof(CardRank)))
                 {
-                    if (rank <= CardRank.Siete || rank >= CardRank.Jota)
-                        Mazo.AnadirArriba(new Naipe(rank, palo));
-                    else
+                    if (rank > CardRank.Siete && rank < CardRank.Jota)
+                    {
                         Perros.AnadirArriba(new Naipe(rank, palo));
+                        Perros.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].faceUp = false;
+                        Perros.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].onGame = false;
+                    }                        
+                }
+            }
+            Perros.Barajar();
+            IniciarNuevaData(numeroDeJugadores, thisPlayer, dataPlayer);
+        }
+
+        public void IniciarNuevaData(int numeroDeJugadores, int thisPlayer, int dataPlayer)
+        {
+            if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
+                throw new ArgumentOutOfRangeException();
+
+            for (int i = 0; i < 4; i++)
+            {
+                Manos[i].NaipesEnGrupo.Clear();
+            }
+            NaipesEnMesa.NaipesEnGrupo.Clear();
+            Mazo.NaipesEnGrupo.Clear();
+
+            foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
+            {
+                foreach (CardRank rank in Enum.GetValues(typeof(CardRank)))
+                {
+                    if (rank <= CardRank.Siete || rank >= CardRank.Jota)
+                    {
+                        Mazo.AnadirArriba(new Naipe(rank, palo));
+                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].faceUp = false;
+                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].onGame = true;
+                    }
                 }
             }
             Mazo.Barajar();
-            Perros.Barajar();
-            Repartir(numeroDeJugadores);
+            Repartir(numeroDeJugadores, thisPlayer, dataPlayer);
         }
 
         /// <summary>
         /// Deals a hand of Cuarenta
         /// </summary>
         /// <param name="numeroDeJugadores">Numbers of players in the Match</param>
-        public void Repartir(int numeroDeJugadores)
+        /// <param name="thisPlayer">Which player is this</param>
+        /// <param name="dataPlayer">Which player is dealing</param>
+        public void Repartir(int numeroDeJugadores, int thisPlayer, int dataPlayer)
         {
             if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
+            int indexPlayer = dataPlayer + 1;
             for (int i = 0; i < numeroDeJugadores; i++)
             {
+                if (indexPlayer >= numeroDeJugadores)
+                    indexPlayer = 0;
                 for (int j = 0; j < 5; j++)
                 {
-                    Manos[i].AnadirArriba(Mazo.TomarTop());
+                    Manos[indexPlayer].AnadirArriba(Mazo.TomarTop());
+                    if (thisPlayer == indexPlayer)
+                        Manos[indexPlayer].NaipesEnGrupo[j].faceUp = true;
+                    else
+                        Manos[indexPlayer].NaipesEnGrupo[j].faceUp = false;
                 }
+                indexPlayer++;
             }
         }
         #endregion

@@ -2,7 +2,7 @@
 using System;
 using Cuarenta.Enums;
 
-namespace SharedCuarenta.CuarentaEngine
+namespace Cuarenta.CuarentaEngine
 {
     class CardSlots
     {
@@ -11,14 +11,14 @@ namespace SharedCuarenta.CuarentaEngine
         /// Position of the cards of the players and if that slot is used
         /// There are 4 playeres and each one can have 5 cards
         /// </summary>
-        public Point[,] PlayerCardPosition { get; set; } = new Point[4, 5];
+        public Point[,] PlayerCardPosition { get; } = new Point[4, 5];
         public bool[,] UsedPlayerCardPosition { get; set; } = new bool[4, 5];
 
         /// <summary>
         /// Position of the cards on the table and if that slot si used
         /// A maximun of 10 cards could be on the table
         /// </summary>
-        public Point[] TableCardPosition { get; set; } = new Point[10];
+        public Point[] TableCardPosition { get; } = new Point[10];
         public bool[] UsedTableCardPosition { get; set; } = new bool[10];
 
         /// <summary>
@@ -26,14 +26,14 @@ namespace SharedCuarenta.CuarentaEngine
         /// Each player or team have their own score cards (2 players or teams)
         /// and a max of six cards needed to keep the score
         /// </summary>
-        public Point[,] ScoreCardPosition { get; set; } = new Point[2, 6];
+        public Point[,] ScoreCardPosition { get; } = new Point[2, 6];
         public bool[,] UsedScoreCardPosition { get; set; } = new bool[2, 6];
 
         /// <summary>
         /// Position of the cards that left and will be dealed.
         /// Kept as an array for future expansion
         /// </summary>
-        public Point[] ToDealCardPosition { get; set; } = new Point[1];
+        public Point[] ToDealCardPosition { get; } = new Point[1];
         public bool[] UsedToDealCardPosition { get; set; } = new bool[1];
 
         /// <summary>
