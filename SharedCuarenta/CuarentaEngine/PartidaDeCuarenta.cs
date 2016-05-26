@@ -31,6 +31,12 @@ namespace SharedCuarenta.CuarentaEngine
             Perros = new GrupoDeNaipes();
             Carton = new GrupoDeNaipes[2];
             Puntos = new GrupoDeNaipes[2];
+            for (int i = 0; i < 4; i++)
+                Manos[i] = new GrupoDeNaipes();
+            for (int i = 0; i < 2; i++)
+                Carton[i] = new GrupoDeNaipes();
+            for (int i = 0; i < 2; i++)
+                Puntos[i] = new GrupoDeNaipes();
         }
         #endregion
 
@@ -55,8 +61,8 @@ namespace SharedCuarenta.CuarentaEngine
                     if (rank > CardRank.Siete && rank < CardRank.Jota)
                     {
                         Perros.AnadirArriba(new Naipe(rank, palo));
-                        Perros.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].faceUp = false;
-                        Perros.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].onGame = false;
+                        Perros.NaipesEnGrupo[Perros.NaipesEnGrupo.Count - 1].FaceUp = false;
+                        Perros.NaipesEnGrupo[Perros.NaipesEnGrupo.Count - 1].OnGame = false;
                     }                        
                 }
             }
@@ -83,8 +89,8 @@ namespace SharedCuarenta.CuarentaEngine
                     if (rank <= CardRank.Siete || rank >= CardRank.Jota)
                     {
                         Mazo.AnadirArriba(new Naipe(rank, palo));
-                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].faceUp = false;
-                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].onGame = true;
+                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].FaceUp = false;
+                        Mazo.NaipesEnGrupo[Mazo.NaipesEnGrupo.Count - 1].OnGame = true;
                     }
                 }
             }
@@ -112,9 +118,11 @@ namespace SharedCuarenta.CuarentaEngine
                 {
                     Manos[indexPlayer].AnadirArriba(Mazo.TomarTop());
                     if (thisPlayer == indexPlayer)
-                        Manos[indexPlayer].NaipesEnGrupo[j].faceUp = true;
+                    {
+                        Manos[indexPlayer].NaipesEnGrupo[j].FaceUp = true;
+                    }
                     else
-                        Manos[indexPlayer].NaipesEnGrupo[j].faceUp = false;
+                        Manos[indexPlayer].NaipesEnGrupo[j].FaceUp = false;
                 }
                 indexPlayer++;
             }

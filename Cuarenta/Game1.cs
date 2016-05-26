@@ -48,6 +48,7 @@ namespace Cuarenta
         {
             // TODO: Add your initialization logic here
             this.IsMouseVisible = true;
+            gameManager.newGame(4, 0);
 
             base.Initialize();
         }
@@ -62,7 +63,9 @@ namespace Cuarenta
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            foreach(CardPalo palo in Enum.GetValues(typeof(CardPalo)))
+            
+            //load textures for cards
+            foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
             {
                 string paloString = "";
                 if (palo == CardPalo.Brillo)
@@ -74,20 +77,21 @@ namespace Cuarenta
                 else if (palo == CardPalo.Trebol)
                     paloString = "graficos/naipes/cardClubs";
 
-                for (int i = 1; i <= 13; i++)
+                for (int i = 0; i < 13; i++)
                 {
-                    if (i == 1)
+                    if (i == 0)
                         texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "A"));
-                    else if (i > 1 && i <= 10)
-                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + i));
-                    else if (i == 11)
+                    else if (i > 0 && i <= 9)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + (i + 1)));
+                    else if (i == 10)
                         texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "J"));
-                    else if (i == 12)
+                    else if (i == 11)
                         texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "Q"));
-                    else if (i == 13)
+                    else if (i == 12)
                         texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "K"));
                 }
             }
+            texturas.Add("back", Content.Load<Texture2D>("graficos/naipes/cardBack_blue3"));
         }
 
         /// <summary>
@@ -123,9 +127,12 @@ namespace Cuarenta
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Green);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            gameManager.Draw(spriteBatch, texturas);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

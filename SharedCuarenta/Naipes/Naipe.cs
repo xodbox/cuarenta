@@ -4,6 +4,7 @@ using System;
 using SharedCuarenta.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace SharedCuarenta.Naipes
 {
@@ -13,14 +14,15 @@ namespace SharedCuarenta.Naipes
         #region Properties
         public CardRank Rank { get; }
         public CardPalo Palo { get; }
-        public bool faceUp { get; set; }
-        public bool onGame { get; set; }
+        public bool FaceUp { get; set; }
+        public bool OnGame { get; set; }
         public Rectangle CardSize { get; set; }
-        public Texture2D texture { get; set; }
+        public bool Rotated { get; set; }
         #endregion
 
         #region Fields
         Rectangle drawRectangle;
+        Vector2 position;
         #endregion
 
         #region Initializer
@@ -33,8 +35,9 @@ namespace SharedCuarenta.Naipes
         {
             Rank = rank;
             Palo = palo;
-            faceUp = false;
-            onGame = false;
+            FaceUp = false;
+            OnGame = false;
+            Rotated = false;
         }
         #endregion
 
@@ -45,8 +48,8 @@ namespace SharedCuarenta.Naipes
         /// <param name="center">center of the place where to put the sprite</param>
         public void SetCenter(Point center)
         {
-            drawRectangle.X = (int)(center.X - (float)CardSize.Width / 2);
-            drawRectangle.Y = (int)(center.Y - (float)CardSize.Height / 2);
+            drawRectangle.X = center.X;
+            drawRectangle.Y = center.Y;
             drawRectangle.Width = CardSize.Width;
             drawRectangle.Height = CardSize.Height;
         }
@@ -55,10 +58,21 @@ namespace SharedCuarenta.Naipes
         /// Draw a Card
         /// </summary>
         /// <param name="spriteBatch">Game sprite batch</param>
-        /// <param name="texture">texture to draw</param>
-        public void Draw(SpriteBatch spriteBatch)
+        /// <param name="textures">texture to draw</param>
+        public void Draw(SpriteBatch spriteBatch, Dictionary<String, Texture2D> textures)
         {
-            spriteBatch.Draw(texture, drawRectangle, Color.White);
+            Texture2D texture = textures[Rank.ToString() + Palo.ToString()];
+            float rotation = 0;
+            if (Rotated)
+                rotation = (float)Math.PI / 2;
+                
+            if (OnGame)
+            {
+                if (FaceUp)
+                    spriteBatch.Draw(texture, drawRectangle, null, Color.White, rotation, new Vector2(texture.Width / 2, texture.Height/2), SpriteEffects.None, 0);
+                else
+                    spriteBatch.Draw(textures["back"], drawRectangle, null, Color.White, rotation, new Vector2(textures["back"].Width / 2, textures["back"].Height / 2), SpriteEffects.None, 0);
+            }
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SharedCuarenta
 {
@@ -19,6 +20,7 @@ namespace SharedCuarenta
         CardSlots cardSlots;
         static Random rnd = new Random();
         int dataPlayer;
+        int numJugadores;
         #endregion
 
         #region Constructors
@@ -44,6 +46,8 @@ namespace SharedCuarenta
             if (numJugadores != 2 && numJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
+            this.numJugadores = numJugadores;
+            
             //choose who is goint to deal
             dataPlayer = rnd.Next(0, numJugadores);
 
@@ -56,6 +60,9 @@ namespace SharedCuarenta
             {
                 for (int j = 0; j < 5; j++)
                 {
+                    partida.Manos[indexPlayer].NaipesEnGrupo[j].CardSize = cardSlots.CardSize;
+                    if(i == 1 || i == 3)
+                        partida.Manos[indexPlayer].NaipesEnGrupo[j].Rotated = true;
                     if (numJugadores == 4)
                     {
                         partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i, j]);
@@ -66,7 +73,6 @@ namespace SharedCuarenta
                         partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i * 2, j]);
                         cardSlots.UsedPlayerCardPosition[i * 2, j] = true;
                     }
-                    partida.Manos[indexPlayer].NaipesEnGrupo[j].CardSize = cardSlots.CardSize;
                 }
                 indexPlayer++;
                 if (indexPlayer >= numJugadores)
@@ -76,8 +82,9 @@ namespace SharedCuarenta
             //asign slots to cards to deal
             foreach (Naipe card in partida.Mazo.NaipesEnGrupo)
             {
-                card.SetCenter(cardSlots.ToDealCardPosition[0]);
                 card.CardSize = cardSlots.CardSize;
+                card.Rotated = true;
+                card.SetCenter(cardSlots.ToDealCardPosition[0]);
                 cardSlots.UsedToDealCardPosition[0] = true;
             }
 
@@ -88,6 +95,25 @@ namespace SharedCuarenta
             }
             
             gameState = GameState.Playing;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Dictionary<String, Texture2D> textures)
+        {
+            for (int i = 0; i < 2; i++)
+                foreach (Naipe card in partida.Carton[i].NaipesEnGrupo)
+                    card.Draw(spriteBatch, textures);
+            for (int i = 0; i < numJugadores; i++)
+                foreach (Naipe card in partida.Manos[i].NaipesEnGrupo)
+                    card.Draw(spriteBatch, textures);
+            foreach (Naipe card in partida.Mazo.NaipesEnGrupo)
+                card.Draw(spriteBatch, textures);
+            foreach (Naipe card in partida.NaipesEnMesa.NaipesEnGrupo)
+                card.Draw(spriteBatch, textures);
+            for (int i = 0; i < 2; i++)
+                foreach (Naipe card in partida.Puntos[0].NaipesEnGrupo)
+                    card.Draw(spriteBatch, textures);
+
+
         }
 
         public void ProcessClick(Vector2 clickPosition)
