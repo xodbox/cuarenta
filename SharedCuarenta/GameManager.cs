@@ -1,6 +1,6 @@
-﻿using Cuarenta.CuarentaEngine;
-using Cuarenta.Enums;
-using Cuarenta.Naipes;
+﻿using SharedCuarenta.CuarentaEngine;
+using SharedCuarenta.Enums;
+using SharedCuarenta.Naipes;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -86,6 +86,7 @@ namespace SharedCuarenta
             {
                 card.CardSize = cardSlots.CardSize;
             }
+            
             gameState = GameState.Playing;
         }
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cuarenta.Naipes;
-using Cuarenta.Enums;
+using SharedCuarenta.Naipes;
+using SharedCuarenta.Enums;
 
-namespace Cuarenta.CuarentaEngine
+namespace SharedCuarenta.CuarentaEngine
 {
     class PartidaDeCuarenta
     {

@@ -1,11 +1,11 @@
 ﻿//Clase que representa un naipe de una baraja
 
 using System;
-using Cuarenta.Enums;
+using SharedCuarenta.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Cuarenta.Naipes
+namespace SharedCuarenta.Naipes
 {
 
     public class Naipe
@@ -56,7 +56,7 @@ namespace Cuarenta.Naipes
         /// </summary>
         /// <param name="spriteBatch">Game sprite batch</param>
         /// <param name="texture">texture to draw</param>
-        public void Draw(SpriteBatch spriteBatch, Texture2D texture)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, drawRectangle, Color.White);
         }

@@ -1,6 +1,6 @@
 ﻿//Enums used through the project
 
-namespace Cuarenta.Enums
+namespace SharedCuarenta.Enums
 {
 
     public enum CardRank
@@ -26,6 +26,8 @@ namespace Cuarenta.Enums
         public const int InterCardSpace = 5;
         public const float CardRatioWH = 0.7368421f;
         public const float PerrosSpaceRatioSW = 0.1875f;
+        public const int WinWindowSizeX = 1000;
+        public const int WinWindowSizeY = 600;
     }
 
 }

@@ -5,9 +5,8 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
 using System;
-using Cuarenta.Naipes;
-using Cuarenta.CuarentaEngine;
-using Cuarenta;
+using SharedCuarenta;
+using SharedCuarenta.Enums;
 
 namespace Cuarenta
 {
@@ -21,6 +20,7 @@ namespace Cuarenta
 
         GraphicsDevice device;
         GameManager gameManager;
+        Dictionary<String, Texture2D> texturas;
 
         public Game1()
         {
@@ -31,11 +31,11 @@ namespace Cuarenta
             //graphics.PreferredBackBufferWidth = device.DisplayMode.Width - 30;
             //graphics.PreferredBackBufferHeight = device.DisplayMode.Height - 90;
 
-            graphics.PreferredBackBufferWidth = 1000;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = Constants.WinWindowSizeX;
+            graphics.PreferredBackBufferHeight = Constants.WinWindowSizeY;
 
-            gameManager = new GameManager();
-
+            texturas = new Dictionary<String, Texture2D>();
+            gameManager = new GameManager(new Rectangle(0, 0, Constants.WinWindowSizeX, Constants.WinWindowSizeY));
         }
 
         /// <summary>
@@ -62,6 +62,32 @@ namespace Cuarenta
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            foreach(CardPalo palo in Enum.GetValues(typeof(CardPalo)))
+            {
+                string paloString = "";
+                if (palo == CardPalo.Brillo)
+                    paloString = "graficos/naipes/cardDiamonds";
+                else if (palo == CardPalo.Corazon)
+                    paloString = "graficos/naipes/cardHearts";
+                else if (palo == CardPalo.CorazonNegro)
+                    paloString = "graficos/naipes/cardSpades";
+                else if (palo == CardPalo.Trebol)
+                    paloString = "graficos/naipes/cardClubs";
+
+                for (int i = 1; i <= 13; i++)
+                {
+                    if (i == 1)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "A"));
+                    else if (i > 1 && i <= 10)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + i));
+                    else if (i == 11)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "J"));
+                    else if (i == 12)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "Q"));
+                    else if (i == 13)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "K"));
+                }
+            }
         }
 
         /// <summary>

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using Cuarenta.Enums;
+using SharedCuarenta.Enums;
 
-namespace Cuarenta.CuarentaEngine
+namespace SharedCuarenta.CuarentaEngine
 {
     class CardSlots
     {
@@ -30,8 +30,16 @@ namespace Cuarenta.CuarentaEngine
         public bool[,] UsedScoreCardPosition { get; set; } = new bool[2, 6];
 
         /// <summary>
+        /// Position of the cards used to get extra points (carton)
+        /// 2 places to put the cards is needed (so the array has two rows)
+        /// The column is set to one and will be used for future expansions
+        /// </summary>
+        public Point[,] CartonCardPosition { get; } = new Point[2, 1];
+        public bool[,] UsedCartonCardPosition { get; set; } = new bool[2, 1];
+
+        /// <summary>
         /// Position of the cards that left and will be dealed.
-        /// Kept as an array for future expansion
+        /// Kept as an array for future expansions
         /// </summary>
         public Point[] ToDealCardPosition { get; } = new Point[1];
         public bool[] UsedToDealCardPosition { get; set; } = new bool[1];
@@ -71,7 +79,7 @@ namespace Cuarenta.CuarentaEngine
             }
             CardSize = cardSize;
 
-            //calculate slots positions for player 0 (botton player)
+            //calculate slots positions for botton player
             int bottonRowYPositionPlayer = (int)Math.Round(windowSize.Height - (float)cardSize.Height / 2 - Constants.Margin);
             for (int i = 0; i < 5; i++)
             {
@@ -79,7 +87,7 @@ namespace Cuarenta.CuarentaEngine
                 PlayerCardPosition[0, i].Y = bottonRowYPositionPlayer;
             }
 
-            //calculate slots positions for player 2 (top player)
+            //calculate slots positions for top player
             int topRowYPositionPlayer = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
             for (int i = 0; i < 5; i++)
             {
@@ -87,7 +95,7 @@ namespace Cuarenta.CuarentaEngine
                 PlayerCardPosition[2, i].Y = topRowYPositionPlayer;
             }
 
-            //calculate slots positions for player 1 (right player)
+            //calculate slots positions for right player
             int firstPlayerCardYPosition = (int)Math.Round((windowSize.Height - columnWidth * 5) / 2 + columnWidth / 2);
             int rightColumnXPositionPlayer = (int)Math.Round(Constants.Margin + columnWidth * 9 - (float)cardSize.Height / 2); ;
             for (int i = 0; i < 5; i++)
@@ -96,7 +104,7 @@ namespace Cuarenta.CuarentaEngine
                 PlayerCardPosition[1, i].Y = (int)Math.Round(firstPlayerCardYPosition + columnWidth * i);
             }
 
-            //calculate slots positons for player 3 (left player)
+            //calculate slots positons for left player
             int leftColumnXPositionPlayer = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
             for (int i = 0; i < 5; i++)
             {
@@ -121,17 +129,24 @@ namespace Cuarenta.CuarentaEngine
             }
 
             //calculate slots for points cards (perros)
+            //At the 0 row are the botton cards, and at the 1 row are the top cards
             int perrosSpace = (int)Math.Round(Constants.PerrosSpaceRatioSW * cardSize.Width);
-            int scoreCardPlayerXInitPosition = columnCenters[10] - perrosSpace * 5;
             int scoreCardPlayerTopYInitPosition = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
             int scoreCardPlayerBottonYInitPosition = (int)Math.Round(windowSize.Height - Constants.Margin - (float)cardSize.Height / 2 - perrosSpace *5 );
             for (int i=0; i<6; i++)
             {
-                ScoreCardPosition[0, i].X = scoreCardPlayerXInitPosition + perrosSpace * i;
-                ScoreCardPosition[1, i].X = scoreCardPlayerXInitPosition + perrosSpace * i;
+                ScoreCardPosition[0, i].X = columnCenters[9];
+                ScoreCardPosition[1, i].X = columnCenters[9];
                 ScoreCardPosition[0, i].Y = scoreCardPlayerBottonYInitPosition + perrosSpace * i;
                 ScoreCardPosition[1, i].Y = scoreCardPlayerTopYInitPosition + perrosSpace * i;
             }
+
+            //calculate slots for extra points cards (carton)
+            //At the 0 row are the botton cards, and at the 1 row are the top cards
+            CartonCardPosition[0, 0].X = columnCenters[10];
+            CartonCardPosition[1, 0].X = columnCenters[10];
+            CartonCardPosition[0, 0].Y = (int)Math.Round(windowSize.Height - Constants.Margin - (float)cardSize.Height / 2 - perrosSpace * 5);
+            CartonCardPosition[1, 0].Y = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
 
             //calculate slots for to deal cards
             ToDealCardPosition[0].X = (int)Math.Round(columnCenters[9] + columnWidth / 2);
@@ -155,6 +170,10 @@ namespace Cuarenta.CuarentaEngine
                 {
                     UsedScoreCardPosition[i, j] = false;
                 }
+            }
+            for(int i = 0; i < 2; i++)
+            {
+                UsedCartonCardPosition[i, 0] = false;
             }
             UsedToDealCardPosition[0] = false;
 
