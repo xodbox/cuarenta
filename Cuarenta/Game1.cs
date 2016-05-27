@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using System.Collections.Generic;
-using System.IO;
 using System;
 using SharedCuarenta;
 using SharedCuarenta.Enums;

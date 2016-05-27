@@ -2,6 +2,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using System.Collections.Generic;
+using System;
+using SharedCuarenta;
+using SharedCuarenta.Enums;
+
 namespace AndroidCuarenta
 {
     /// <summary>
@@ -12,15 +17,22 @@ namespace AndroidCuarenta
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        GraphicsDevice device;
+        GameManager gameManager;
+        Dictionary<String, Texture2D> texturas;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
             graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferWidth = 600;
             graphics.PreferredBackBufferHeight = 480;
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+
+            texturas = new Dictionary<String, Texture2D>();
+            gameManager = new GameManager(new Rectangle(0, 0, 600, 480));
         }
 
         /// <summary>
@@ -32,6 +44,7 @@ namespace AndroidCuarenta
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            gameManager.newGame(4, 0);
 
             base.Initialize();
         }
