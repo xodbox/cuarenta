@@ -27,12 +27,12 @@ namespace AndroidCuarenta
             Content.RootDirectory = "Content";
 
             graphics.IsFullScreen = true;
-            graphics.PreferredBackBufferWidth = 600;
-            graphics.PreferredBackBufferHeight = 480;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1080;
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
 
             texturas = new Dictionary<String, Texture2D>();
-            gameManager = new GameManager(new Rectangle(0, 0, 600, 480));
+            gameManager = new GameManager(new Rectangle(0, 0, 1920, 1080));
         }
 
         /// <summary>
@@ -59,6 +59,33 @@ namespace AndroidCuarenta
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
+            {
+                string paloString = "";
+                if (palo == CardPalo.Brillo)
+                    paloString = "graficos/naipes/cardDiamonds";
+                else if (palo == CardPalo.Corazon)
+                    paloString = "graficos/naipes/cardHearts";
+                else if (palo == CardPalo.CorazonNegro)
+                    paloString = "graficos/naipes/cardSpades";
+                else if (palo == CardPalo.Trebol)
+                    paloString = "graficos/naipes/cardClubs";
+
+                for (int i = 0; i < 13; i++)
+                {
+                    if (i == 0)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "A"));
+                    else if (i > 0 && i <= 9)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + (i + 1)));
+                    else if (i == 10)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "J"));
+                    else if (i == 11)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "Q"));
+                    else if (i == 12)
+                        texturas.Add(Enum.GetName(typeof(CardRank), i) + palo.ToString(), Content.Load<Texture2D>(paloString + "K"));
+                }
+            }
+            texturas.Add("back", Content.Load<Texture2D>("graficos/naipes/cardBack_blue3"));
         }
 
         /// <summary>
@@ -91,9 +118,12 @@ namespace AndroidCuarenta
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Green);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            gameManager.Draw(spriteBatch, texturas);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
