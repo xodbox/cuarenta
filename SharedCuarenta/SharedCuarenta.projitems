@@ -11,7 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CuarentaEngine\CardSlots.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CuarentaEngine\PartidaDeCuarenta.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Enums\CuarentaEnums.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\CuarentaEnums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\GrupoDeNaipes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\Naipe.cs" />

@@ -1,5 +1,5 @@
 ﻿using SharedCuarenta.CuarentaEngine;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 using SharedCuarenta.Naipes;
 using Microsoft.Xna.Framework;
 using System;
@@ -87,6 +87,7 @@ namespace SharedCuarenta
                     {
                         partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i, j]);
                         cardSlots.UsedPlayerCardPosition[i, j] = true;
+                        partida.Manos[indexPlayer].NaipesEnGrupo[j].InGroup = CardGroup.Hand0;
                     }
                     else
                     {

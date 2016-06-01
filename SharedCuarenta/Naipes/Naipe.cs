@@ -1,7 +1,7 @@
 ﻿//Clase que representa un naipe de una baraja
 
 using System;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -20,6 +20,8 @@ namespace SharedCuarenta.Naipes
         public bool Rotated { get; set; }
         public bool Selected { get; set; }
         public bool Touched { get; set; }
+        public CardGroup InGroup { get; set; }
+        public int CardSlotIndex { get; set; }
         #endregion
 
         #region Fields

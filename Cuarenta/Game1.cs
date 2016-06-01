@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using SharedCuarenta;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 
 namespace Cuarenta
 {

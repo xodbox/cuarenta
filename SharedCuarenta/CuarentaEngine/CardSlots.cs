@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 
 namespace SharedCuarenta.CuarentaEngine
 {

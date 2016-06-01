@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 
 namespace SharedCuarenta.Naipes
 {

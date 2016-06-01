@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SharedCuarenta.Naipes;
-using SharedCuarenta.Enums;
+using SharedCuarenta.Utilities;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 

@@ -1,6 +1,6 @@
 ﻿//Enums used through the project
 
-namespace SharedCuarenta.Enums
+namespace SharedCuarenta.Utilities
 {
 
     public enum CardRank
@@ -25,19 +25,8 @@ namespace SharedCuarenta.Enums
         NormalPlay
     }
 
-    public enum Group
+    public enum CardGroup
     {
         Hand0, Hand1, Hand2, Hand3, Table, Perros, Points, Carton, ToDeal
     }
-
-    public class Constants
-    {
-        public const int Margin = 3;
-        public const int InterCardSpace = 5;
-        public const float CardRatioWH = 0.7368421f;
-        public const float PerrosSpaceRatioSW = 0.1875f;
-        public const int WinWindowSizeX = 1000;
-        public const int WinWindowSizeY = 600;
-    }
-
 }
