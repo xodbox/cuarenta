@@ -20,6 +20,16 @@ namespace SharedCuarenta.Enums
         Playing
     }
 
+    public enum HandState
+    {
+        NormalPlay
+    }
+
+    public enum Group
+    {
+        Hand0, Hand1, Hand2, Hand3, Table, Perros, Points, Carton, ToDeal
+    }
+
     public class Constants
     {
         public const int Margin = 3;

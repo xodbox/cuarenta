@@ -91,6 +91,7 @@ namespace Cuarenta
                 }
             }
             texturas.Add("back", Content.Load<Texture2D>("graficos/naipes/cardBack_blue3"));
+            texturas.Add("frame_red", Content.Load<Texture2D>("graficos/otros/frame_red"));
         }
 
         /// <summary>
@@ -115,6 +116,7 @@ namespace Cuarenta
                 Exit();
 
             // TODO: Add your update logic here
+            gameManager.Update(Mouse.GetState());
             
 
             base.Update(gameTime);

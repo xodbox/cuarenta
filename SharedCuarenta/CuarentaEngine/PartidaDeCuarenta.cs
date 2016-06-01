@@ -5,18 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using SharedCuarenta.Naipes;
 using SharedCuarenta.Enums;
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace SharedCuarenta.CuarentaEngine
 {
     class PartidaDeCuarenta
     {
-        #region Fileds
+        #region Properties
         public GrupoDeNaipes[] Manos { get; }
         public GrupoDeNaipes NaipesEnMesa { get; }
         public GrupoDeNaipes Mazo { get; }
         public GrupoDeNaipes Perros { get; }
         public GrupoDeNaipes[] Carton { get; }
         public GrupoDeNaipes[] Puntos { get; }
+        public bool oneInHandSelected { get; set; }
+        public bool oneInMesaTouched { get; set; }
+        #endregion
+
+        #region Fields
+        List<Naipe> CollectedFromTable = new List<Naipe>();
         #endregion
 
         #region Constructor
@@ -126,6 +134,229 @@ namespace SharedCuarenta.CuarentaEngine
                 }
                 indexPlayer++;
             }
+        }
+
+        /// <summary>
+        /// Process if the player has clicked a card in their hand
+        /// </summary>
+        /// <param name="clickedPoint">Point of the window clicked</param>
+        /// <param name="thisPlayer">Player who is playing</param>
+        /// <returns>Returns true if a card in the hand of the player was clicked</returns>
+        public bool ProcessCardInHandClicked(Point clickedPoint, int thisPlayer)
+        {
+            bool clicked = false;
+            foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
+            {
+                if (card.isClicked(clickedPoint.X, clickedPoint.Y))
+                {
+                    if (card.Selected)
+                    {
+                        card.MoveToOriginalPosition();
+                        card.Selected = false;
+                        oneInHandSelected = false;
+                    }
+                    else
+                    {
+                        foreach (Naipe everyCard in Manos[thisPlayer].NaipesEnGrupo)
+                        {
+                            everyCard.MoveToOriginalPosition();
+                            everyCard.Selected = false;
+                        }
+                        card.MoveUp();
+                        card.Selected = true;
+                        oneInHandSelected = true;
+                    }
+                    clicked = true;
+                }
+            }
+            return clicked;
+        }
+
+        /// <summary>
+        /// Process if one card in the table (Mesa) has been clicked
+        /// Also sets the property if at least one card is touched (selected)
+        /// </summary>
+        /// <param name="clickedPoint">Point where the player has clicked</param>
+        /// <returns>Returns true if a card in the table (Mesa) has been clicked</returns>
+        public bool ProcessCardInMesaClicked(Point clickedPoint)
+        {
+            bool clicked = false;
+            oneInMesaTouched = false;
+
+            foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
+            {
+                if (card.isClicked(clickedPoint.X, clickedPoint.Y))
+                {
+                    if (card.Touched)
+                    {
+                        card.Touched = false;
+                    }
+                    else
+                    {
+                        card.Touched = true;
+                    }
+                    clicked = true;
+                }
+                if (card.Touched)
+                {
+                    oneInMesaTouched = true;
+                }
+            }
+            return clicked;
+        }
+
+        /// <summary>
+        /// This method is used when the user trhrows a card in the table
+        /// </summary>
+        /// <param name="clickedPoint">where the user clicked on the table</param>
+        /// <param name="thisPlayer">who is playing</param>
+        /// <param name="tableLimits">limits of the playing table</param>
+        /// <param name="selectedCard">which card is been trown</param>
+        /// <param name="cardSlots">spaces allowed to place cards</param>
+        /// <returns>returns true if a valid place on the playing table was clicked</returns>
+        public bool ProcessMesaClicked (
+            Point clickedPoint, 
+            int thisPlayer, 
+            Rectangle tableLimits, 
+            Naipe selectedCard, 
+            CardSlots cardSlots)
+        {
+            if (tableLimits.Contains(clickedPoint.X, clickedPoint.Y))
+            {
+                NaipesEnMesa.NaipesEnGrupo.Add(selectedCard);
+                Manos[thisPlayer].NaipesEnGrupo.Remove(selectedCard);
+                selectedCard.Selected = false;
+                oneInHandSelected = false;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (!cardSlots.UsedTableCardPosition[i])
+                    {
+                        selectedCard.SetCenter(cardSlots.TableCardPosition[i]);
+                        cardSlots.UsedTableCardPosition[i] = true;
+                        break;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool MakeMove(int thisPlayer, int thisTeam, CardSlots cardSlots)
+        {
+            List<Naipe> touchedCardsOnTable = new List<Naipe>();
+            Naipe selectedCardOnHand = new Naipe();
+
+            foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
+            {
+                if (card.Touched)
+                {
+                    touchedCardsOnTable.Add(card);
+                }
+            }
+
+            foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
+            {
+                if (card.Selected)
+                {
+                    selectedCardOnHand = card;
+                    break;
+                }
+            }
+
+            foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
+            {
+                card.Selected = false;
+                card.MoveToOriginalPosition();
+            }
+            oneInHandSelected = false;
+
+            foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
+                card.Touched = false;
+            oneInMesaTouched = true;
+
+            touchedCardsOnTable.Sort(new NaipesComparer());
+            if(ProcessMove(selectedCardOnHand, touchedCardsOnTable))
+            {
+                Manos[thisPlayer].NaipesEnGrupo.Remove(selectedCardOnHand);
+                foreach (Naipe card in touchedCardsOnTable)
+                    NaipesEnMesa.NaipesEnGrupo.Remove(card);
+
+                selectedCardOnHand.SetCenter(cardSlots.CartonCardPosition[thisTeam, 0]);
+                Carton[thisTeam].AnadirArriba(selectedCardOnHand);
+                foreach (Naipe card in touchedCardsOnTable)
+                {
+                    card.SetCenter(cardSlots.CartonCardPosition[thisTeam, 0]);
+                    Carton[thisTeam].AnadirArriba(card);
+                }
+
+                return true;
+            }
+            else
+            {
+                foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
+                    card.Selected = false;
+                foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
+                    card.Touched = false;
+
+                return false;
+            }
+        }
+        #endregion
+
+        #region Private Methods
+        private bool ProcessMove(Naipe selectedCardOnHand, List<Naipe> touchedCardsOnTable)
+        {
+            int rankVal;
+
+            for (int i = 0; i < touchedCardsOnTable.Count; i++)
+            {
+                if (selectedCardOnHand.Rank == touchedCardsOnTable[0].Rank)
+                {
+                    if (i == 0)
+                    {
+                        CollectedFromTable.Add(selectedCardOnHand);
+                        CollectedFromTable.Add(touchedCardsOnTable[0]);
+                    }
+                    if (i > 0)
+                    {
+                        rankVal = (int)touchedCardsOnTable[i].Rank;
+                        if (rankVal >= 11)
+                            rankVal -= 3;
+
+                        if ((int)touchedCardsOnTable[i - 1].Rank + 1 == rankVal)
+                            CollectedFromTable.Add(touchedCardsOnTable[i]);
+                        else
+                            return false;
+                    }
+                }
+                else if (
+                    touchedCardsOnTable.Count >= 2 &&
+                    (int)touchedCardsOnTable[0].Rank <= 7 &&
+                    (int)touchedCardsOnTable[1].Rank <= 7 &&
+                    (int)selectedCardOnHand.Rank == (int)touchedCardsOnTable[0].Rank + (int)touchedCardsOnTable[1].Rank)
+                {
+                    if (i == 0)
+                    {
+                        CollectedFromTable.Add(selectedCardOnHand);
+                        CollectedFromTable.Add(touchedCardsOnTable[0]);
+                        CollectedFromTable.Add(touchedCardsOnTable[1]);
+                    }
+                    if (i > 1)
+                    {
+                        rankVal = (int)touchedCardsOnTable[i].Rank;
+                        if (rankVal >= 11)
+                            rankVal -= 3;
+
+                        if ((int)touchedCardsOnTable[i - 1].Rank + 1 == rankVal)
+                            CollectedFromTable.Add(touchedCardsOnTable[i]);
+                        else
+                            return false;
+                    }
+                }
+                else
+                    return false;
+            }
+            return true;
         }
         #endregion
     }

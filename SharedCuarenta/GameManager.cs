@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
+using System.Diagnostics;
 
 namespace SharedCuarenta
 {
@@ -15,12 +18,19 @@ namespace SharedCuarenta
     class GameManager
     {
         #region Fields
-        GameState gameState;
         PartidaDeCuarenta partida;
         CardSlots cardSlots;
-        static Random rnd = new Random();
+        MouseState oldMouseState;
+        TouchCollection oldTouchCollection;
         int dataPlayer;
         int numJugadores;
+        int thisPlayer;
+        int playerPlaying;
+        int thisTeam;
+        static Random rnd = new Random();
+        GameState gameState;
+        HandState handState;
+
         #endregion
 
         #region Constructors
@@ -31,6 +41,8 @@ namespace SharedCuarenta
         {
             partida = new PartidaDeCuarenta();
             cardSlots = new CardSlots(windowSize);
+            oldMouseState = new MouseState();
+            oldTouchCollection = new TouchCollection();
         }
         #endregion
 
@@ -40,18 +52,26 @@ namespace SharedCuarenta
         /// </summary>
         /// <param name="numJugadores">Number of players</param>
         /// <param name="thisPlayer">which player is playing this game</param>
-        /// <param name="dataPlayer">which player is going to deal</param>
         public void newGame(int numJugadores, int thisPlayer)
         {
             if (numJugadores != 2 && numJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
             this.numJugadores = numJugadores;
+            this.thisPlayer = thisPlayer;
+            if (numJugadores == 2)
+                thisTeam = thisPlayer;
+            else
+                thisTeam = thisPlayer % 2;
             
             //choose who is goint to deal
             dataPlayer = rnd.Next(0, numJugadores);
+            dataPlayer = 3;
+            playerPlaying = dataPlayer + 1;
+            if (playerPlaying >= numJugadores)
+                playerPlaying = 0;
 
-            // Begin game (shuffle and deal cardas, choose which cards are face up. SIZE IS NOT ASSIGNED, determine if card is on game)
+            // Begin game (shuffle and deal cards, choose which cards are face up. SIZE IS NOT ASSIGNED, determine if card is on game)
             partida.IniciarPartida(numJugadores, thisPlayer, dataPlayer);
 
             //assign slots to dealt cards
@@ -95,8 +115,14 @@ namespace SharedCuarenta
             }
             
             gameState = GameState.Playing;
+            handState = HandState.NormalPlay;
         }
 
+        /// <summary>
+        /// Draw the game
+        /// </summary>
+        /// <param name="spriteBatch">sprite batch for the game</param>
+        /// <param name="textures">all the textures used, stored in a dictionary</param>
         public void Draw(SpriteBatch spriteBatch, Dictionary<String, Texture2D> textures)
         {
             for (int i = 0; i < 2; i++)
@@ -116,14 +142,54 @@ namespace SharedCuarenta
 
         }
 
-        public void ProcessClick(Vector2 clickPosition)
+        public void Update (MouseState mouseState)
         {
+            if (mouseState.LeftButton == ButtonState.Pressed && mouseState != oldMouseState)
+                ProcessInput(mouseState.X, mouseState.Y);
+            oldMouseState = mouseState;
 
+        }
+
+        public void Update(TouchCollection touchCollection)
+        {
+            if (touchCollection.Count > 0 && touchCollection[0] != oldTouchCollection[0])
+                ProcessInput((int)touchCollection[0].Position.X, (int)touchCollection[0].Position.Y);
+            oldTouchCollection[0] = touchCollection[0];
         }
 
         #endregion
 
         #region Private Methdos
+        private void ProcessInput(int x, int y)
+        {
+            Rectangle rec = new Rectangle(0,0, 50, 50);
+
+            if(gameState == GameState.Playing)
+            {
+                if(handState == HandState.NormalPlay)
+                {
+                    if(playerPlaying == thisPlayer)
+                    {
+                        partida.ProcessCardInHandClicked(new Point(x, y), thisPlayer);
+                        if (!partida.ProcessCardInMesaClicked(new Point(x, y)) && !partida.oneInMesaTouched)
+                        {
+                            foreach (Naipe card in partida.Manos[thisPlayer].NaipesEnGrupo)
+                            {
+                                if (card.Selected)
+                                {
+                                    partida.ProcessMesaClicked(new Point(x, y), thisPlayer, cardSlots.TableLimits, card, cardSlots);
+                                    break;
+                                }
+                            }
+                        }
+                        if(rec.Contains(x, y))
+                        {
+                            partida.MakeMove(thisPlayer, thisTeam, cardSlots);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
     }

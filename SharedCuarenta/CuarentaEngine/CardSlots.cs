@@ -22,6 +22,11 @@ namespace SharedCuarenta.CuarentaEngine
         public bool[] UsedTableCardPosition { get; set; } = new bool[10];
 
         /// <summary>
+        /// Limits wher cards can be thronw
+        /// </summary>
+        public Rectangle TableLimits { get; set; }
+
+        /// <summary>
         /// Position of the cards used to keep the score
         /// Each player or team have their own score cards (2 players or teams)
         /// and a max of six cards needed to keep the score
@@ -97,7 +102,7 @@ namespace SharedCuarenta.CuarentaEngine
 
             //calculate slots positions for right player
             int firstPlayerCardYPosition = (int)Math.Round((windowSize.Height - columnWidth * 5) / 2 + columnWidth / 2);
-            int rightColumnXPositionPlayer = (int)Math.Round(Constants.Margin + columnWidth * 9 - (float)cardSize.Height / 2); ;
+            int rightColumnXPositionPlayer = (int)Math.Round(Constants.Margin + columnWidth * 8 );
             for (int i = 0; i < 5; i++)
             {
                 PlayerCardPosition[1, i].X = rightColumnXPositionPlayer;
@@ -105,7 +110,7 @@ namespace SharedCuarenta.CuarentaEngine
             }
 
             //calculate slots positons for left player
-            int leftColumnXPositionPlayer = (int)Math.Round((float)cardSize.Height / 2 + Constants.Margin);
+            int leftColumnXPositionPlayer = (int)Math.Round(columnWidth + Constants.Margin);
             for (int i = 0; i < 5; i++)
             {
                 PlayerCardPosition[3, i].X = leftColumnXPositionPlayer;
@@ -127,6 +132,14 @@ namespace SharedCuarenta.CuarentaEngine
                 TableCardPosition[i + 5].X = columnCenters[2 + i];
                 TableCardPosition[i + 5].Y = bottonRowTableCardYPosition;
             }
+
+            int xTableLimit = (int)Math.Round(columnWidth * 2);
+            int yTableLimit = (int)Math.Round(PlayerCardPosition[3, 1].Y - (float)cardSize.Width / 2);
+            int widthTableLimit = (int)Math.Round(columnWidth * 5);
+            int heightTableLimit = (int)Math.Round(columnWidth * 3);
+
+            //calculate table limits
+            TableLimits = new Rectangle(xTableLimit, yTableLimit, widthTableLimit, heightTableLimit);
 
             //calculate slots for points cards (perros)
             //At the 0 row are the botton cards, and at the 1 row are the top cards
