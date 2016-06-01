@@ -17,5 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\GrupoDeNaipes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\Naipe.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Naipes\NaipesComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Pair.cs" />
   </ItemGroup>
 </Project>
