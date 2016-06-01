@@ -4,8 +4,11 @@ using System.Text;
 
 namespace SharedCuarenta.Utilities
 {
-    class Pair<T, U>
+    public class Pair<T, U>
     {
+        public T First { get; set; }
+        public U Second { get; set; }
+
         public Pair()
         {
         }
@@ -15,8 +18,5 @@ namespace SharedCuarenta.Utilities
             this.First = first;
             this.Second = second;
         }
-
-        public T First { get; set; }
-        public U Second { get; set; }
     }
 }

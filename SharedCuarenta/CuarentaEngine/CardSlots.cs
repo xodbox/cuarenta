@@ -193,5 +193,60 @@ namespace SharedCuarenta.CuarentaEngine
         }
         #endregion
 
+        #region Static Methods
+        public static Pair<CardGroup,int> getGroupIndexHand(int handIndex, int index)
+        {
+            CardGroup group;
+
+            if(handIndex == 0)
+                group = CardGroup.Hand0;
+            else if (handIndex == 1)
+                group = CardGroup.Hand1;
+            else if (handIndex == 2)
+                group = CardGroup.Hand2;
+            else
+                group = CardGroup.Hand3;
+
+            return (new Pair<CardGroup, int>(group, index));
+        }
+
+        public static Pair<CardGroup, int> getGroupIndexCardsInTable(int index)
+        {
+            return (new Pair<CardGroup, int>(CardGroup.Table, index));
+        }
+
+        public static Pair<CardGroup, int> getGroupIndexScoreCards(int teamIndex, int index)
+        {
+            CardGroup group;
+
+            if (teamIndex == 0)
+                group = CardGroup.Points0;
+            else
+                group = CardGroup.Points1;
+
+            return (new Pair<CardGroup, int>(group, index));
+        }
+
+        public static Pair<CardGroup, int> getGroupIndexCartonCards(int teamIndex, int index)
+        {
+            CardGroup group;
+
+            if (teamIndex == 0)
+                group = CardGroup.Carton0;
+            else
+                group = CardGroup.Carton1;
+
+            return (new Pair<CardGroup, int>(group, index));
+        }
+
+        public static Pair<CardGroup, int> getGroupIndexToDealCards(int index)
+        {
+            CardGroup group;
+
+            group = CardGroup.ToDeal;
+
+            return (new Pair<CardGroup, int>(group, index));
+        }
+        #endregion
     }
 }

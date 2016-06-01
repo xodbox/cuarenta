@@ -27,6 +27,6 @@ namespace SharedCuarenta.Utilities
 
     public enum CardGroup
     {
-        Hand0, Hand1, Hand2, Hand3, Table, Perros, Points, Carton, ToDeal
+        Hand0, Hand1, Hand2, Hand3, Table, Points0, Points1, Carton0, Carton1, ToDeal
     }
 }

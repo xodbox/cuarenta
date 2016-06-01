@@ -80,18 +80,18 @@ namespace SharedCuarenta
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    partida.Manos[indexPlayer].NaipesEnGrupo[j].CardSize = cardSlots.CardSize;
+                    Naipe card = partida.Manos[indexPlayer].NaipesEnGrupo[j];
+                    card.CardSize = cardSlots.CardSize;
                     if(i == 1 || i == 3)
-                        partida.Manos[indexPlayer].NaipesEnGrupo[j].Rotated = true;
+                        card.Rotated = true;
                     if (numJugadores == 4)
                     {
-                        partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i, j]);
+                        card.SetCenter(cardSlots.PlayerCardPosition[i, j]);
                         cardSlots.UsedPlayerCardPosition[i, j] = true;
-                        partida.Manos[indexPlayer].NaipesEnGrupo[j].InGroup = CardGroup.Hand0;
                     }
                     else
                     {
-                        partida.Manos[indexPlayer].NaipesEnGrupo[j].SetCenter(cardSlots.PlayerCardPosition[i * 2, j]);
+                        card.SetCenter(cardSlots.PlayerCardPosition[i * 2, j]);
                         cardSlots.UsedPlayerCardPosition[i * 2, j] = true;
                     }
                 }

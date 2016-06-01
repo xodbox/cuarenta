@@ -20,8 +20,7 @@ namespace SharedCuarenta.Naipes
         public bool Rotated { get; set; }
         public bool Selected { get; set; }
         public bool Touched { get; set; }
-        public CardGroup InGroup { get; set; }
-        public int CardSlotIndex { get; set; }
+        public Pair<CardGroup, int> slotAssigned { get; set; }
         #endregion
 
         #region Fields
