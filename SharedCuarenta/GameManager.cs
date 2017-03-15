@@ -87,6 +87,7 @@ namespace SharedCuarenta
                     if (numJugadores == 4)
                     {
                         card.SetCenter(cardSlots.PlayerCardPosition[i, j]);
+                        card.slotAssigned = CardSlots.getGroupIndexHand(i, j);
                         cardSlots.UsedPlayerCardPosition[i, j] = true;
                     }
                     else
