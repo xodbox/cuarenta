@@ -1,4 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Entrance place for the Win version of the Game
+//Most of the work is done by the shared class GameManager,
+//which is shared with the other platforms in which the game run.
+
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,6 +12,9 @@ using System;
 using SharedCuarenta;
 using SharedCuarenta.Utilities;
 
+/// <summary>
+/// Main namespace of the Game
+/// </summary>
 namespace Cuarenta
 {
     /// <summary>
@@ -30,6 +38,7 @@ namespace Cuarenta
             //graphics.PreferredBackBufferWidth = device.DisplayMode.Width - 30;
             //graphics.PreferredBackBufferHeight = device.DisplayMode.Height - 90;
 
+            //Define the size of the window
             graphics.PreferredBackBufferWidth = Constants.WinWindowSizeX;
             graphics.PreferredBackBufferHeight = Constants.WinWindowSizeY;
 
@@ -46,7 +55,10 @@ namespace Cuarenta
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            //Mouse is needed, make it visible
             this.IsMouseVisible = true;
+            //Create a new game
             gameManager.newGame(4, 0);
 
             base.Initialize();
