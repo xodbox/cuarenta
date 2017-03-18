@@ -233,6 +233,7 @@ namespace SharedCuarenta.CuarentaEngine
                     {
                         selectedCard.SetCenter(cardSlots.TableCardPosition[i]);
                         cardSlots.UsedTableCardPosition[i] = true;
+                        selectedCard.slotAssigned = new Pair<CardGroup, int>(CardGroup.Table, i);
                         break;
                     }
                 }
@@ -279,13 +280,25 @@ namespace SharedCuarenta.CuarentaEngine
             {
                 Manos[thisPlayer].NaipesEnGrupo.Remove(selectedCardOnHand);
                 foreach (Naipe card in touchedCardsOnTable)
+                {
+                    Pair<CardGroup, int> slot = card.slotAssigned;
+                    cardSlots.UsedTableCardPosition[slot.Second]= false;
                     NaipesEnMesa.NaipesEnGrupo.Remove(card);
+                }
 
                 selectedCardOnHand.SetCenter(cardSlots.CartonCardPosition[thisTeam, 0]);
+                if(thisTeam == 0)
+                    selectedCardOnHand.slotAssigned = new Pair<CardGroup, int>(CardGroup.Carton0, 0);
+                else
+                    selectedCardOnHand.slotAssigned = new Pair<CardGroup, int>(CardGroup.Carton1, 0);
                 Carton[thisTeam].AnadirArriba(selectedCardOnHand);
                 foreach (Naipe card in touchedCardsOnTable)
                 {
                     card.SetCenter(cardSlots.CartonCardPosition[thisTeam, 0]);
+                    if (thisTeam == 0)
+                        card.slotAssigned = new Pair<CardGroup, int>(CardGroup.Carton0, 0);
+                    else
+                        card.slotAssigned = new Pair<CardGroup, int>(CardGroup.Carton1, 0);
                     Carton[thisTeam].AnadirArriba(card);
                 }
 
