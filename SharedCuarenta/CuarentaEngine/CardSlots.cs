@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿///Ths class is used to manage the slots or places where the cards are layed down during the game
+
+using Microsoft.Xna.Framework;
 using System;
 using SharedCuarenta.Utilities;
 
@@ -194,6 +196,12 @@ namespace SharedCuarenta.CuarentaEngine
         #endregion
 
         #region Static Methods
+        /// <summary>
+        /// Get a pair that contains the CardGroup (Hand) and the index of a particular card
+        /// </summary>
+        /// <param name="handIndex">Index of the hand</param>
+        /// <param name="index">Index of the card in the hand</param>
+        /// <returns></returns>
         public static Pair<CardGroup,int> getGroupIndexHand(int handIndex, int index)
         {
             CardGroup group;
@@ -210,11 +218,22 @@ namespace SharedCuarenta.CuarentaEngine
             return (new Pair<CardGroup, int>(group, index));
         }
 
+        /// <summary>
+        /// Get a Pair <CardGroup, int> of a card in the Table
+        /// </summary>
+        /// <param name="index">index of a card in the table</param>
+        /// <returns></returns>
         public static Pair<CardGroup, int> getGroupIndexCardsInTable(int index)
         {
             return (new Pair<CardGroup, int>(CardGroup.Table, index));
         }
 
+        /// <summary>
+        /// Get a Pair <CardGroup, int> of a card in the Score Cards
+        /// </summary>
+        /// <param name="teamIndex">index of the team owing this Score Cards</param>
+        /// <param name="index">index of the card in the Score Cards</param>
+        /// <returns></returns>
         public static Pair<CardGroup, int> getGroupIndexScoreCards(int teamIndex, int index)
         {
             CardGroup group;
@@ -227,6 +246,12 @@ namespace SharedCuarenta.CuarentaEngine
             return (new Pair<CardGroup, int>(group, index));
         }
 
+        /// <summary>
+        /// Get a Pair <CardGroup, int> of a card in the Carton group
+        /// </summary>
+        /// <param name="teamIndex">index of the team owning this Carton</param>
+        /// <param name="index">index of the card in the Carton</param>
+        /// <returns></returns>
         public static Pair<CardGroup, int> getGroupIndexCartonCards(int teamIndex, int index)
         {
             CardGroup group;
@@ -239,6 +264,11 @@ namespace SharedCuarenta.CuarentaEngine
             return (new Pair<CardGroup, int>(group, index));
         }
 
+        /// <summary>
+        /// Get a Pair <CardGroup, int> of a card in the cards to deal
+        /// </summary>
+        /// <param name="index">index of the card in the Cards to be dealt</param>
+        /// <returns></returns>
         public static Pair<CardGroup, int> getGroupIndexToDealCards(int index)
         {
             CardGroup group;
