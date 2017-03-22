@@ -117,7 +117,7 @@ namespace SharedCuarenta
             }
 
             //this is for TESTING
-            Naipe card1 = new Naipe(CardRank.As, CardPalo.Brillo);
+            Naipe card1 = new Naipe(CardRank.Dos, CardPalo.Brillo);
             partida.NaipesEnMesa.NaipesEnGrupo.Add(card1);
             card1.CardSize = cardSlots.CardSize;
             card1.OnGame = true;
@@ -133,7 +133,7 @@ namespace SharedCuarenta
                 }
             }
 
-            Naipe card2 = new Naipe(CardRank.Dos, CardPalo.Brillo);
+            Naipe card2 = new Naipe(CardRank.Tres, CardPalo.Brillo);
             partida.NaipesEnMesa.NaipesEnGrupo.Add(card2);
             card2.CardSize = cardSlots.CardSize;
             card2.OnGame = true;
@@ -149,7 +149,7 @@ namespace SharedCuarenta
                 }
             }
 
-            partida.Manos[0].NaipesEnGrupo[0].Rank = CardRank.Tres;
+            partida.Manos[0].NaipesEnGrupo[0].Rank = CardRank.Cinco;
             //end of TESTING
 
             gameState = GameState.Playing;

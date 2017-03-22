@@ -369,9 +369,9 @@ namespace SharedCuarenta.CuarentaEngine
                 }
                 else if (
                     touchedCardsOnTable.Count >= 2 &&
-                    (int)touchedCardsOnTable[0].Rank <= 7 &&
-                    (int)touchedCardsOnTable[1].Rank <= 7 &&
-                    (int)selectedCardOnHand.Rank == (int)touchedCardsOnTable[0].Rank + (int)touchedCardsOnTable[1].Rank)
+                    (int)touchedCardsOnTable[0].Rank + 1 <= 7 &&
+                    (int)touchedCardsOnTable[1].Rank + 1 <= 7 &&
+                    (int)selectedCardOnHand.Rank + 1 == (int)touchedCardsOnTable[0].Rank + (int)touchedCardsOnTable[1].Rank + 2)
                 {
                     if (i == 0)
                     {
