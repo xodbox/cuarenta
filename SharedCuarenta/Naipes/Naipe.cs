@@ -12,7 +12,7 @@ namespace SharedCuarenta.Naipes
     public class Naipe
     {
         #region Properties
-        public CardRank Rank { get; }
+        public CardRank Rank { get; set; } //TESTING this should be only get
         public CardPalo Palo { get; }
         public bool FaceUp { get; set; }
         public bool OnGame { get; set; }

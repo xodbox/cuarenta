@@ -43,9 +43,6 @@ namespace SharedCuarenta
             cardSlots = new CardSlots(windowSize);
             oldMouseState = new MouseState();
             oldTouchCollection = new TouchCollection();
-
-            //this lines are for testing
-            partida.Manos[0].TomarTop();
         }
         #endregion
 
@@ -118,7 +115,43 @@ namespace SharedCuarenta
             {
                 card.CardSize = cardSlots.CardSize;
             }
-            
+
+            //this is for TESTING
+            Naipe card1 = new Naipe(CardRank.As, CardPalo.Brillo);
+            partida.NaipesEnMesa.NaipesEnGrupo.Add(card1);
+            card1.CardSize = cardSlots.CardSize;
+            card1.OnGame = true;
+            card1.FaceUp = true;
+            for (int i = 0; i < 10; i++)
+            {
+                if (!cardSlots.UsedTableCardPosition[i])
+                {
+                    card1.SetCenter(cardSlots.TableCardPosition[i]);
+                    cardSlots.UsedTableCardPosition[i] = true;
+                    card1.SlotAssigned = CardSlots.getGroupIndexCardsInTable(i);
+                    break;
+                }
+            }
+
+            Naipe card2 = new Naipe(CardRank.Dos, CardPalo.Brillo);
+            partida.NaipesEnMesa.NaipesEnGrupo.Add(card2);
+            card2.CardSize = cardSlots.CardSize;
+            card2.OnGame = true;
+            card2.FaceUp = true;
+            for (int i = 0; i < 10; i++)
+            {
+                if (!cardSlots.UsedTableCardPosition[i])
+                {
+                    card2.SetCenter(cardSlots.TableCardPosition[i]);
+                    cardSlots.UsedTableCardPosition[i] = true;
+                    card2.SlotAssigned = CardSlots.getGroupIndexCardsInTable(i);
+                    break;
+                }
+            }
+
+            partida.Manos[0].NaipesEnGrupo[0].Rank = CardRank.Tres;
+            //end of TESTING
+
             gameState = GameState.Playing;
             handState = HandState.NormalPlay;
         }
