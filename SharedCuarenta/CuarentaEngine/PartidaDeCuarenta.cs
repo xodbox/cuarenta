@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Manages different aspects of a Cuarenta match, shuffle cards, deal them, etc.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,8 +62,10 @@ namespace SharedCuarenta.CuarentaEngine
             if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
+            //Clear the Perros (point cards)
             Perros.NaipesEnGrupo.Clear();
 
+            //Creat a set of Perros
             foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
             {
                 foreach (CardRank rank in Enum.GetValues(typeof(CardRank)))
@@ -78,11 +82,18 @@ namespace SharedCuarenta.CuarentaEngine
             IniciarNuevaData(numeroDeJugadores, thisPlayer, dataPlayer);
         }
 
+        /// <summary>
+        /// Clear everything and shuffle, and call a function to deal the cards
+        /// </summary>
+        /// <param name="numeroDeJugadores">Number of players in the match</param>
+        /// <param name="thisPlayer">Which player is this</param>
+        /// <param name="dataPlayer">Which player is dealing</param>
         public void IniciarNuevaData(int numeroDeJugadores, int thisPlayer, int dataPlayer)
         {
             if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
+            //Clear the cards in the hands of the players, in the table and in the whole deck (without the Perros)
             for (int i = 0; i < 4; i++)
             {
                 Manos[i].NaipesEnGrupo.Clear();
@@ -90,6 +101,7 @@ namespace SharedCuarenta.CuarentaEngine
             NaipesEnMesa.NaipesEnGrupo.Clear();
             Mazo.NaipesEnGrupo.Clear();
 
+            //Create a complete deck without Perros
             foreach (CardPalo palo in Enum.GetValues(typeof(CardPalo)))
             {
                 foreach (CardRank rank in Enum.GetValues(typeof(CardRank)))
@@ -117,6 +129,7 @@ namespace SharedCuarenta.CuarentaEngine
             if (numeroDeJugadores != 2 && numeroDeJugadores != 4)
                 throw new ArgumentOutOfRangeException();
 
+            //Deal the cards
             int indexPlayer = dataPlayer + 1;
             for (int i = 0; i < numeroDeJugadores; i++)
             {
@@ -242,11 +255,19 @@ namespace SharedCuarenta.CuarentaEngine
             return false;
         }
 
+        /// <summary>
+        /// Make a movement once the player has clicked the button Make Move
+        /// </summary>
+        /// <param name="thisPlayer">Which player is this</param>
+        /// <param name="thisTeam">Which team the player belongs to</param>
+        /// <param name="cardSlots">Slots or places to lay down cards in the game</param>
+        /// <returns>Returns True if a valid move was completed</returns>
         public bool MakeMove(int thisPlayer, int thisTeam, CardSlots cardSlots)
         {
             List<Naipe> touchedCardsOnTable = new List<Naipe>();
             Naipe selectedCardOnHand = new Naipe();
 
+            //Get a list of touched cards on table
             foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
             {
                 if (card.Touched)
@@ -255,6 +276,7 @@ namespace SharedCuarenta.CuarentaEngine
                 }
             }
 
+            //Get a list of the selected card on hand
             foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
             {
                 if (card.Selected)
@@ -264,6 +286,7 @@ namespace SharedCuarenta.CuarentaEngine
                 }
             }
 
+            //No matter if the move is complited, the selected card on hand will be unselected
             foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
             {
                 card.Selected = false;
@@ -271,13 +294,17 @@ namespace SharedCuarenta.CuarentaEngine
             }
             oneInHandSelected = false;
 
+            //No matter if the move is complited, the selected cards on the table will be unselected
             foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
                 card.Touched = false;
-            oneInMesaTouched = true;
+            oneInMesaTouched = false;
 
+            //Sort the list of touched Table Cards
             touchedCardsOnTable.Sort(new NaipesComparer());
+            //Execute this if the move is valid
             if(ProcessMove(selectedCardOnHand, touchedCardsOnTable))
             {
+                //Remove the selected card on hand and selected cards on table
                 Manos[thisPlayer].NaipesEnGrupo.Remove(selectedCardOnHand);
                 foreach (Naipe card in touchedCardsOnTable)
                 {
@@ -286,6 +313,7 @@ namespace SharedCuarenta.CuarentaEngine
                     NaipesEnMesa.NaipesEnGrupo.Remove(card);
                 }
 
+                //Move the cards to their new position (Carton)
                 selectedCardOnHand.SetCenter(cardSlots.CartonCardPosition[thisTeam, 0]);
                 selectedCardOnHand.SlotAssigned = CardSlots.getGroupIndexCartonCards(thisTeam, 0);
                 Carton[thisTeam].AnadirArriba(selectedCardOnHand);
@@ -298,25 +326,28 @@ namespace SharedCuarenta.CuarentaEngine
 
                 return true;
             }
+            //Execute this if it was not a valid move
             else
             {
-                foreach (Naipe card in Manos[thisPlayer].NaipesEnGrupo)
-                    card.Selected = false;
-                foreach (Naipe card in NaipesEnMesa.NaipesEnGrupo)
-                    card.Touched = false;
-
                 return false;
             }
         }
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// This method perfoms a Move, acording to the selected card on hand or the touched card on table
+        /// </summary>
+        /// <param name="selectedCardOnHand">Selected card on the hand of the player</param>
+        /// <param name="touchedCardsOnTable">Selected cards on the table</param>
+        /// <returns>Return True if a valid move was possible and performed</returns>
         private bool ProcessMove(Naipe selectedCardOnHand, List<Naipe> touchedCardsOnTable)
         {
             int rankVal;
 
             for (int i = 0; i < touchedCardsOnTable.Count; i++)
             {
+                //If the ranks are the same:
                 if (selectedCardOnHand.Rank == touchedCardsOnTable[0].Rank)
                 {
                     if (i == 0)

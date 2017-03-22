@@ -43,6 +43,9 @@ namespace SharedCuarenta
             cardSlots = new CardSlots(windowSize);
             oldMouseState = new MouseState();
             oldTouchCollection = new TouchCollection();
+
+            //this lines are for testing
+            partida.Manos[0].TomarTop();
         }
         #endregion
 
